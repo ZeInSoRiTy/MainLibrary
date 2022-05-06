@@ -1,23 +1,27 @@
 local UserInputService = game:GetService("UserInputService")
+-- local KeyCode = "RightControl"
+local OpenKey = Enum.KeyCode.RightControl
 local runService = (game:GetService("RunService"));
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local DisplayDebounce = false
+local CtrlDebounce = false
 local SCgui = Instance.new("ScreenGui")
 SCgui.Parent = LocalPlayer.PlayerGui
 local gui = Instance.new("Frame")
+gui.Visible = false
 gui.Parent = SCgui
-
-
+gui.BorderSizePixel = 2
+gui.BorderColor3 = Color3.new(0, 1, 1)
 gui:TweenSize(
-	UDim2.new(0.4,0,0,0), 
+	UDim2.new(0.6,0,0,0), 
 	Enum.EasingDirection.In,   
 	Enum.EasingStyle.Sine,      
 	1,                          
 	true
 )
 gui:TweenSize(
-	UDim2.new(0.4,0,1,0), 
+	UDim2.new(0.6,0,0.5,0), 
 	Enum.EasingDirection.In,   
 	Enum.EasingStyle.Sine,      
 	1,                          
@@ -31,7 +35,7 @@ local TitleFrame = Instance.new("Frame")
 TitleFrame.Parent = gui
 TitleFrame.BackgroundColor3 = Color3.new(0,0,0)
 TitleFrame.BorderSizePixel = 0
-TitleFrame.Size = UDim2.new(1,0,0.001,0)
+TitleFrame.Size = UDim2.new(1,0,0.005,0)
 TitleFrame.Position = UDim2.new(0,0,0.1,0)
 
 local TitleText = Instance.new("TextLabel")
@@ -45,30 +49,89 @@ TitleText.TextScaled = true
 TitleText.Position = UDim2.new(0.4,0,0,0)
 TitleText.TextStrokeTransparency = 0
 TitleText.TextStrokeColor3 = Color3.new(1, 1, 1)
+function zigzag(X) return math.acos(math.cos(X*math.pi))/math.pi end
+
+	
+
 local CloseButton = Instance.new("TextButton")
 CloseButton.Parent = gui
 CloseButton.BackgroundTransparency = 1
-CloseButton.Text = "X"
-CloseButton.Font = "FredokaOne"
-CloseButton.TextColor3 = Color3.new(1, 0, 0.0156863)
-CloseButton.SizeConstraint = "RelativeXX"
-CloseButton.Size = UDim2.new(0.1,0,0.1,0)
-CloseButton.TextScaled = true
-CloseButton.Position = UDim2.new(0.935,0,-0.05,0)
+CloseButton.Position = UDim2.new(0,0,0,0)
+CloseButton.Size = UDim2.new(1,0,0.1,0)
+CloseButton.Text = ""
+
+local MenuButton = Instance.new("TextButton")
+MenuButton.Parent = gui
+MenuButton.BackgroundTransparency = 1
+MenuButton.Text = "..."
+MenuButton.Font = "FredokaOne"
+MenuButton.TextColor3 = Color3.new(1, 1, 1)
+MenuButton.TextScaled = true
+MenuButton.Size = UDim2.new(0.1,0,0.1,0)
+MenuButton.Position = UDim2.new(0,0,0,0)
+
+--local KeyBindButton = Instance.new("TextButton")
+--KeyBindButton.Parent = gui
+--KeyBindButton.BackgroundColor3 = Color3.new(0,0,0)
+--KeyBindButton.Text = "Change KeyBind... Current Keybind: "..KeyCode
+--KeyBindButton.Font = "FredokaOne"
+--KeyBindButton.TextColor3 = Color3.new(1,1,1)
+--KeyBindButton.TextScaled = true
+--KeyBindButton.Size = UDim2.new(0.2,0,0.1,0)
+--KeyBindButton.Position = UDim2.new(0.8,0,0.9,0)
+--local function ChangeKeyBind()
+	--	KeyBindButton.Text = "Waiting for Input..."
+		--UserInputService.InputBegan:Connect(function(input)  ---- Coming Soon
+			--local KeyPressed = input.KeyCode.Name
+			--print(KeyPressed)
+			--KeyCode = KeyPressed
+		--KeyBindButton.TextScaled = "Change KeyBind... Current Keybind: "..KeyCode
+		--end)
+--end
+-- KeyBindButton.MouseButton1Click:Connect(ChangeKeyBind)
+local Menu = Instance.new("Frame")
+Menu.Parent = gui
+Menu.BackgroundColor3 = Color3.new(0.333333, 1, 0.498039)
+Menu.Size = UDim2.new(0.25,0,1,0)
+Menu.Visible = false
+local MenuCorner = Instance.new("UICorner")
+MenuCorner.Parent = Menu
+MenuCorner.CornerRadius = UDim.new(0,16)
 local function Displaying()
 	if DisplayDebounce == false then
-		CloseButton.Position = UDim2.new(0.935, 0,-2.75, 0)
-	CloseButton.Text = "-"
-		gui.Size = UDim2.new(0.4,0,0.02,0)
+		CloseButton.Position = UDim2.new(0, 0,0, 0)
+		CloseButton.Size = UDim2.new(1, 0,0.5, 0)
+		CloseButton.Text = ""
+		gui.Size = UDim2.new(0.6,0,0.02,0)
 		DisplayDebounce = true
+		TitleText.Visible = false
+		MenuButton.Visible = false
 	else
-		CloseButton.Position = UDim2.new(0.935,0,-0.05,0)
-		CloseButton.Text = "X"
-		gui.Size = UDim2.new(0.4,0,1,0)
+		CloseButton.Position = UDim2.new(0,0,0,0)
+		CloseButton.Size = UDim2.new(1,0,0.1,0)
+		CloseButton.Text = ""
+		gui.Size = UDim2.new(0.6,0,0.5,0)
 		DisplayDebounce = false
+		TitleText.Visible = true
+		MenuButton.Visible = true
 	end
 end
+
+
+local function CtrlImput(input)
+	if input.KeyCode == OpenKey then
+		if CtrlDebounce == false then
+			gui.Visible = true
+			CtrlDebounce = true
+		else
+			gui.Visible = false
+			CtrlDebounce = false
+		end
+	end
+end
+UserInputService.InputBegan:Connect(CtrlImput)
 CloseButton.MouseButton1Click:Connect(Displaying)
+
 local dragging
 local dragInput
 local dragStart
@@ -117,3 +180,12 @@ gui.InputChanged:Connect(function(input)
 end)
 
 runService.Heartbeat:Connect(Update)
+while true do
+	counter = 0
+
+	while wait(0.2)do
+		TitleText.TextStrokeColor3 = Color3.fromHSV(zigzag(counter),1,1)
+
+		counter = counter + 0.01
+	end
+end
