@@ -9,6 +9,11 @@ local CtrlDebounce = false
 local MenuDebounce = false
 local ABDebounce = false
 local ABEnabledCMDebounce = false
+local TCEnabledCMDebounce = false
+local VCEnabledCMDebounce = false
+local COTDebounce = false
+local ESPDebounce = false
+local ESPEnabledDebounce = false
 local SCgui = Instance.new("ScreenGui")
 SCgui.Parent = LocalPlayer.PlayerGui
 local gui = Instance.new("Frame")
@@ -103,7 +108,8 @@ Menu.BorderSizePixel = 0
 local MenuCorner = Instance.new("UICorner")
 MenuCorner.Parent = Menu
 MenuCorner.CornerRadius = UDim.new(0,16)
-
+local MenuListLayout = Instance.new("UIListLayout")
+MenuListLayout.Parent = Menu
 local ABButton = Instance.new("TextButton")
 ABButton.Parent = Menu
 ABButton.BackgroundColor3 = Color3.new(0.333333, 1, 0.498039)
@@ -145,32 +151,104 @@ EnabledCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
 local EnabledCMLabel = Instance.new("TextLabel")
 EnabledCMLabel.Parent = ABFrame
 EnabledCMLabel.BackgroundTransparency = 1
-EnabledCMLabel.Size = UDim2.new(0.2,0,0.05,0)
+EnabledCMLabel.Size = UDim2.new(0.2,0,0.1,0)
 EnabledCMLabel.Position = UDim2.new(0.175,0,0.14,0)
 EnabledCMLabel.Text = "Enabled"
 EnabledCMLabel.Font = "FredokaOne"
 EnabledCMLabel.TextScaled = true
 EnabledCMLabel.TextColor3 = Color3.new(1, 1, 1)
 
+local ESPButton = Instance.new("TextButton")
+ESPButton.Parent = Menu
+ESPButton.BackgroundColor3 = Color3.new(0.333333, 1, 0.498039)
+ESPButton.BorderSizePixel = 2
+ESPButton.BorderColor3 = Color3.new(0, 0, 0)
+ESPButton.Text = "ESP"
+ESPButton.Font = "FredokaOne"
+ESPButton.TextColor3 = Color3.new(1, 0, 0.0156863)
+ESPButton.TextScaled = true
+ESPButton.Size = UDim2.new(1,0,0.1,0)
+ESPButton.Position = UDim2.new(0,0,0.1,0)
+
+local ESPFrame = Instance.new("Frame")
+ESPFrame.Parent = gui
+ESPFrame.Visible = false
+ESPFrame.BackgroundColor3 = Color3.new(0,0,0)
+ESPFrame.Size = UDim2.new(0.75,0,0.9,0)
+ESPFrame.Position = UDim2.new(0.25,0,0.1,0)
+
+local ESPTitle = Instance.new("TextLabel")
+ESPTitle.Parent = ESPFrame
+ESPTitle.BackgroundTransparency = true
+ESPTitle.BorderSizePixel = 0
+ESPTitle.Text = "Visuals"
+ESPTitle.Font = "FredokaOne"
+ESPTitle.TextColor3 = Color3.new(0.666667, 0, 0)
+ESPTitle.TextScaled = true
+ESPTitle.Size = UDim2.new(1,0,0.1,0)
+
+local EnabledESPCheckMark = Instance.new("ImageButton")
+EnabledESPCheckMark.Parent = ESPFrame
+EnabledESPCheckMark.SizeConstraint = "RelativeXX"
+EnabledESPCheckMark.Size = UDim2.new(0.05,0,0.1,0)
+EnabledESPCheckMark.Position = UDim2.new(0.1,0,0.15,0)
+EnabledESPCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
+EnabledESPCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
+
+
+local EnabledESPCMLabel = Instance.new("TextLabel")
+EnabledESPCMLabel.Parent = ESPFrame
+EnabledESPCMLabel.BackgroundTransparency = 1
+EnabledESPCMLabel.Size = UDim2.new(0.2,0,0.05,0)
+EnabledESPCMLabel.Position = UDim2.new(0.175,0,0.14,0)
+EnabledESPCMLabel.Text = "Enabled"
+EnabledESPCMLabel.Font = "FredokaOne"
+EnabledESPCMLabel.TextScaled = true
+EnabledESPCMLabel.TextColor3 = Color3.new(1, 1, 1)
 local function ABEnabledCM()
 	if ABEnabledCMDebounce == false then
 		EnabledCheckMark.BorderColor3= Color3.new(0, 0, 0.498039)
 		EnabledCheckMark.BackgroundColor3 = Color3.new(0, 0, 1)
 		ABEnabledCMDebounce = true
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/mitka1337/Universal-roblox-aimbot-fullmaster/main/aim_master.lua", true))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/ZeInSoRiTy/MainLibrary/main/AimBot", true))()
 	else
 		EnabledCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
 		EnabledCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
 		ABEnabledCMDebounce = false	
 	end
 end
+
+local function ESPEnabledCM()
+	if ESPEnabledDebounce == false then
+		EnabledESPCheckMark.BorderColor3= Color3.new(0, 0, 0.498039)
+		EnabledESPCheckMark.BackgroundColor3 = Color3.new(0, 0, 1)
+		ESPEnabledDebounce = true
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/ZeInSoRiTy/MainLibrary/main/ESP.lua", true))()
+	else
+		EnabledESPCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
+		EnabledESPCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
+		ABEnabledCMDebounce = false	
+	end
+end
+
 local function ABDisplaying()
 	if ABDebounce == false then
 		ABFrame.Visible = true
+		ESPFrame.Visible = false
 		ABDebounce = true
 	else
 		ABFrame.Visible = false
 		ABDebounce = false
+	end
+end
+local function ESPDisplaying()
+	if ESPDebounce == false then
+		ESPFrame.Visible = true
+		ABFrame.Visible = false
+		ESPDebounce = true
+	else
+		ESPFrame.Visible = false
+		ESPDebounce = false
 	end
 end
 local function MenuDisplaying()
@@ -239,6 +317,8 @@ CloseButton.MouseButton1Click:Connect(Displaying)
 MenuButton.MouseButton1Click:Connect(MenuDisplaying)
 ABButton.MouseButton1Click:Connect(ABDisplaying)
 EnabledCheckMark.MouseButton1Click:Connect(ABEnabledCM)
+ESPButton.MouseButton1Click:Connect(ESPDisplaying)
+EnabledESPCheckMark.MouseButton1Click:Connect(ESPEnabledCM)
 local dragging
 local dragInput
 local dragStart
