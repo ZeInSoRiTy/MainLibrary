@@ -1,11 +1,16 @@
 local UserInputService = game:GetService("UserInputService")
--- local KeyCode = "RightControl"
+--local KeyCode = "RightControl"
 local OpenKey = Enum.KeyCode.RightControl
 local runService = (game:GetService("RunService"));
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local DisplayDebounce = false
 local CtrlDebounce = false
+local MenuDebounce = false
+local ABDebounce = false
+local ABEnabledCMDebounce = false
+local TCEnabledCMDebounce = false
+local VCEnabledCMDebounce = false
 local SCgui = Instance.new("ScreenGui")
 SCgui.Parent = LocalPlayer.PlayerGui
 local gui = Instance.new("Frame")
@@ -69,34 +74,196 @@ MenuButton.TextColor3 = Color3.new(1, 1, 1)
 MenuButton.TextScaled = true
 MenuButton.Size = UDim2.new(0.1,0,0.1,0)
 MenuButton.Position = UDim2.new(0,0,0,0)
+MenuButton.ZIndex = 2
+--[[
+local KeyBindButton = Instance.new("TextButton")
+KeyBindButton.Parent = gui
+KeyBindButton.BackgroundColor3 = Color3.new(0,0,0)
+KeyBindButton.Text = "Change KeyBind... Current Keybind: "..KeyCode
+KeyBindButton.Font = "FredokaOne"
+KeyBindButton.TextColor3 = Color3.new(1,1,1)
+KeyBindButton.TextScaled = true
+KeyBindButton.Size = UDim2.new(0.2,0,0.1,0)
+KeyBindButton.Position = UDim2.new(0.8,0,0.9,0)
+local function ChangeKeyBind()
+		KeyBindButton.Text = "Waiting for Input..."
+		UserInputService.InputBegan:Connect(function(input)  ---- Coming Soon
+			local KeyPressed = input.KeyCode.Name
+			print(KeyPressed)
+			KeyCode = KeyPressed
+		KeyBindButton.TextScaled = "Change KeyBind... Current Keybind: "..KeyCode
+		end)
+end
 
---local KeyBindButton = Instance.new("TextButton")
---KeyBindButton.Parent = gui
---KeyBindButton.BackgroundColor3 = Color3.new(0,0,0)
---KeyBindButton.Text = "Change KeyBind... Current Keybind: "..KeyCode
---KeyBindButton.Font = "FredokaOne"
---KeyBindButton.TextColor3 = Color3.new(1,1,1)
---KeyBindButton.TextScaled = true
---KeyBindButton.Size = UDim2.new(0.2,0,0.1,0)
---KeyBindButton.Position = UDim2.new(0.8,0,0.9,0)
---local function ChangeKeyBind()
-	--	KeyBindButton.Text = "Waiting for Input..."
-		--UserInputService.InputBegan:Connect(function(input)  ---- Coming Soon
-			--local KeyPressed = input.KeyCode.Name
-			--print(KeyPressed)
-			--KeyCode = KeyPressed
-		--KeyBindButton.TextScaled = "Change KeyBind... Current Keybind: "..KeyCode
-		--end)
---end
--- KeyBindButton.MouseButton1Click:Connect(ChangeKeyBind)
+KeyBindButton.MouseButton1Click:Connect(ChangeKeyBind)
+--]]
 local Menu = Instance.new("Frame")
 Menu.Parent = gui
 Menu.BackgroundColor3 = Color3.new(0.333333, 1, 0.498039)
-Menu.Size = UDim2.new(0.25,0,1,0)
-Menu.Visible = false
+Menu.Size = UDim2.new(0,0,1,0)
+Menu.BorderSizePixel = 0
 local MenuCorner = Instance.new("UICorner")
 MenuCorner.Parent = Menu
 MenuCorner.CornerRadius = UDim.new(0,16)
+
+local ABButton = Instance.new("TextButton")
+ABButton.Parent = Menu
+ABButton.BackgroundColor3 = Color3.new(0.333333, 1, 0.498039)
+ABButton.BorderSizePixel = 2
+ABButton.BorderColor3 = Color3.new(0, 0, 0)
+ABButton.Text = "AimBot"
+ABButton.Font = "FredokaOne"
+ABButton.TextColor3 = Color3.new(1, 0, 0.0156863)
+ABButton.TextScaled = true
+ABButton.Size = UDim2.new(1,0,0.1,0)
+ABButton.Position = UDim2.new(0,0,0.1,0)
+
+local ABFrame = Instance.new("Frame")
+ABFrame.Parent = gui
+ABFrame.Visible = false
+ABFrame.BackgroundColor3 = Color3.new(0,0,0)
+ABFrame.Size = UDim2.new(0.75,0,0.9,0)
+ABFrame.Position = UDim2.new(0.25,0,0.1,0)
+
+local ABTitle = Instance.new("TextLabel")
+ABTitle.Parent = ABFrame
+ABTitle.BackgroundTransparency = true
+ABTitle.BorderSizePixel = 0
+ABTitle.Text = "AimBot"
+ABTitle.Font = "FredokaOne"
+ABTitle.TextColor3 = Color3.new(0.666667, 0, 0)
+ABTitle.TextScaled = true
+ABTitle.Size = UDim2.new(1,0,0.1,0)
+
+local EnabledCheckMark = Instance.new("ImageButton")
+EnabledCheckMark.Parent = ABFrame
+EnabledCheckMark.SizeConstraint = "RelativeXX"
+EnabledCheckMark.Size = UDim2.new(0.05,0,0.05,0)
+EnabledCheckMark.Position = UDim2.new(0.1,0,0.15,0)
+EnabledCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
+EnabledCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
+
+local EnabledCMLabel = Instance.new("TextLabel")
+EnabledCMLabel.Parent = ABFrame
+EnabledCMLabel.BackgroundTransparency = 1
+EnabledCMLabel.Size = UDim2.new(0.2,0,0.05,0)
+EnabledCMLabel.Position = UDim2.new(0.175,0,0.14,0)
+EnabledCMLabel.Text = "Enabled"
+EnabledCMLabel.Font = "FredokaOne"
+EnabledCMLabel.TextScaled = true
+EnabledCMLabel.TextColor3 = Color3.new(1, 1, 1)
+
+local TeamCheckMark = Instance.new("ImageButton")
+TeamCheckMark.Parent = ABFrame
+TeamCheckMark.SizeConstraint = "RelativeXX"
+TeamCheckMark.Size = UDim2.new(0.05,0,0.05,0)
+TeamCheckMark.Position = UDim2.new(0.1,0,0.20,0)
+TeamCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
+TeamCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
+
+local TeamCMLabel = Instance.new("TextLabel")
+TeamCMLabel.Parent = ABFrame
+TeamCMLabel.BackgroundTransparency = 1
+TeamCMLabel.Size = UDim2.new(0.3,0,0.05,0)
+TeamCMLabel.Position = UDim2.new(0.175,0,0.19,0)
+TeamCMLabel.Text = "Team Check"
+TeamCMLabel.Font = "FredokaOne"
+TeamCMLabel.TextScaled = true
+TeamCMLabel.TextColor3 = Color3.new(1, 1, 1)
+
+local VisibleCheckMark = Instance.new("ImageButton")
+VisibleCheckMark.Parent = ABFrame
+VisibleCheckMark.SizeConstraint = "RelativeXX"
+VisibleCheckMark.Size = UDim2.new(0.05,0,0.05,0)
+VisibleCheckMark.Position = UDim2.new(0.1,0,0.25,0)
+VisibleCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
+VisibleCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
+
+local VCMLabel = Instance.new("TextLabel")
+VCMLabel.Parent = ABFrame
+VCMLabel.BackgroundTransparency = 1
+VCMLabel.Size = UDim2.new(0.3,0,0.05,0)
+VCMLabel.Position = UDim2.new(0.175,0,0.24,0)
+VCMLabel.Text = "Visible Check"
+VCMLabel.Font = "FredokaOne"
+VCMLabel.TextScaled = true
+VCMLabel.TextColor3 = Color3.new(1, 1, 1)
+
+local TargetPartLabel = Instance.new("TextLabel")
+TargetPartLabel.Parent = ABFrame
+TargetPartLabel.BackgroundTransparency = 1
+TargetPartLabel.Size = UDim2.new(0.3,0,0.05,0)
+TargetPartLabel.Position = UDim2.new(0.1,0,0.29,0)
+TargetPartLabel.Text = "Target Part"
+TargetPartLabel.Font = "FredokaOne"
+TargetPartLabel.TextScaled = true
+TargetPartLabel.TextColor3 = Color3.new(1, 1, 1)
+
+local function ABEnabledCM()
+	if ABEnabledCMDebounce == false then
+		EnabledCheckMark.BorderColor3= Color3.new(0, 0, 0.498039)
+		EnabledCheckMark.BackgroundColor3 = Color3.new(0, 0, 1)
+		ABEnabledCMDebounce = true
+	else
+		EnabledCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
+		EnabledCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
+		ABEnabledCMDebounce = false	
+	end
+end
+local function TCEnabledCM()
+	if TCEnabledCMDebounce == false then
+		TeamCheckMark.BorderColor3= Color3.new(0, 0, 0.498039)
+		TeamCheckMark.BackgroundColor3 = Color3.new(0, 0, 1)
+		TCEnabledCMDebounce = true
+	else
+		TeamCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
+		TeamCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
+		TCEnabledCMDebounce = false	
+	end
+end
+local function VCEnabledCM()
+	if VCEnabledCMDebounce == false then
+		VisibleCheckMark.BorderColor3= Color3.new(0, 0, 0.498039)
+		VisibleCheckMark.BackgroundColor3 = Color3.new(0, 0, 1)
+		VCEnabledCMDebounce = true
+	else
+		VisibleCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
+		VisibleCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
+		VCEnabledCMDebounce = false	
+	end
+end
+local function ABDisplaying()
+	if ABDebounce == false then
+		ABFrame.Visible = true
+		ABDebounce = true
+	else
+		ABFrame.Visible = false
+		ABDebounce = false
+	end
+end
+local function MenuDisplaying()
+	if MenuDebounce == false then
+	Menu:TweenSize(
+		UDim2.new(0.25,0,1,0),
+		Enum.EasingDirection.Out,
+		Enum.EasingStyle.Sine,
+		1,
+		true
+		)
+		MenuDebounce = true
+		
+	else
+		Menu:TweenSize(
+			UDim2.new(0,0,1,0),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Sine,
+			1,
+			true
+		)
+		MenuDebounce = false
+		ABFrame.Visible = false
+	end
+	end
 local function Displaying()
 	if DisplayDebounce == false then
 		CloseButton.Position = UDim2.new(0, 0,0, 0)
@@ -119,6 +286,12 @@ end
 
 
 local function CtrlImput(input)
+--if KeyCode == "RightControl" then
+
+	--else
+
+	--	OpenKey = KeyCode
+	--end
 	if input.KeyCode == OpenKey then
 		if CtrlDebounce == false then
 			gui.Visible = true
@@ -131,7 +304,11 @@ local function CtrlImput(input)
 end
 UserInputService.InputBegan:Connect(CtrlImput)
 CloseButton.MouseButton1Click:Connect(Displaying)
-
+MenuButton.MouseButton1Click:Connect(MenuDisplaying)
+ABButton.MouseButton1Click:Connect(ABDisplaying)
+EnabledCheckMark.MouseButton1Click:Connect(ABEnabledCM)
+TeamCheckMark.MouseButton1Click:Connect(TCEnabledCM)
+VisibleCheckMark.MouseButton1Click:Connect(VCEnabledCM)
 local dragging
 local dragInput
 local dragStart
