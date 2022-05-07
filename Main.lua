@@ -11,6 +11,7 @@ local ABDebounce = false
 local ABEnabledCMDebounce = false
 local TCEnabledCMDebounce = false
 local VCEnabledCMDebounce = false
+local COTDebounce = false
 local SCgui = Instance.new("ScreenGui")
 SCgui.Parent = LocalPlayer.PlayerGui
 local gui = Instance.new("Frame")
@@ -143,6 +144,7 @@ EnabledCheckMark.Position = UDim2.new(0.1,0,0.15,0)
 EnabledCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
 EnabledCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
 
+
 local EnabledCMLabel = Instance.new("TextLabel")
 EnabledCMLabel.Parent = ABFrame
 EnabledCMLabel.BackgroundTransparency = 1
@@ -182,7 +184,7 @@ VisibleCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
 local VCMLabel = Instance.new("TextLabel")
 VCMLabel.Parent = ABFrame
 VCMLabel.BackgroundTransparency = 1
-VCMLabel.Size = UDim2.new(0.3,0,0.05,0)
+VCMLabel.Size = UDim2.new(0.35,0,0.05,0)
 VCMLabel.Position = UDim2.new(0.175,0,0.24,0)
 VCMLabel.Text = "Visible Check"
 VCMLabel.Font = "FredokaOne"
@@ -199,6 +201,100 @@ TargetPartLabel.Font = "FredokaOne"
 TargetPartLabel.TextScaled = true
 TargetPartLabel.TextColor3 = Color3.new(1, 1, 1)
 
+local TargetChooseBox = Instance.new("Frame")
+TargetChooseBox.Parent = ABFrame
+TargetChooseBox.BackgroundColor3 = Color3.new(0.141176, 0.141176, 0.141176)
+TargetChooseBox.BorderColor3 = Color3.new(0.529412, 0.529412, 0.529412)
+TargetChooseBox.Size = UDim2.new(0.5,0,0.05,0)
+TargetChooseBox.Position = UDim2.new(0.1,0,0.34,0)
+
+local TargetLabel = Instance.new("TextButton")
+TargetLabel.Parent = TargetChooseBox
+TargetLabel.BackgroundTransparency = 1
+TargetLabel.Size = UDim2.new(1,0,1,0)
+TargetLabel.Text = "Head"
+TargetLabel.Font = "FredokaOne"
+TargetLabel.TextScaled = true
+TargetLabel.TextColor3 = Color3.new(1,1,1)
+TargetLabel.TextXAlignment = "Left"
+
+local ChooseOtherTargets = Instance.new("Frame")
+ChooseOtherTargets.Parent = ABFrame
+ChooseOtherTargets.BackgroundColor3 = Color3.new(0.141176, 0.141176, 0.141176)
+ChooseOtherTargets.BorderColor3 = Color3.new(0.529412, 0.529412, 0.529412)
+ChooseOtherTargets.Size = UDim2.new(0.5,0,0.15,0)
+ChooseOtherTargets.Position = UDim2.new(0.1,0,0.39,0)
+ChooseOtherTargets.Visible = false
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Parent = ChooseOtherTargets
+UIListLayout.Padding = UDim.new(0.03,0)
+
+local HeadTarget = Instance.new("TextButton")
+HeadTarget.Parent = ChooseOtherTargets
+HeadTarget.BackgroundColor3 = Color3.new(0.141176, 0.141176, 0.141176)
+HeadTarget.BorderColor3 = Color3.new(0.529412, 0.529412, 0.529412)
+HeadTarget.Text = "Head"
+HeadTarget.Font = "FredokaOne"
+HeadTarget.TextScaled = true
+HeadTarget.TextColor3 = Color3.new(0, 0, 1)
+HeadTarget.TextStrokeTransparency = 0
+HeadTarget.TextStrokeColor3 = Color3.new(0,0,0)
+HeadTarget.TextXAlignment = "Left"
+HeadTarget.Size = UDim2.new(1,0,0.33,0)
+
+local HumanoidRTTarget = Instance.new("TextButton")
+HumanoidRTTarget.Parent = ChooseOtherTargets
+HumanoidRTTarget.BackgroundColor3 = Color3.new(0.141176, 0.141176, 0.141176)
+HumanoidRTTarget.BorderColor3 = Color3.new(0.529412, 0.529412, 0.529412)
+HumanoidRTTarget.Text = "HumanoidRootPart"
+HumanoidRTTarget.Font = "FredokaOne"
+HumanoidRTTarget.TextScaled = true
+HumanoidRTTarget.TextColor3 = Color3.new(1, 1, 1)
+HumanoidRTTarget.TextStrokeTransparency = 0
+HumanoidRTTarget.TextStrokeColor3 = Color3.new(0,0,0)
+HumanoidRTTarget.TextXAlignment = "Left"
+HumanoidRTTarget.Size = UDim2.new(1,0,0.33,0)
+
+local RandomTarget = Instance.new("TextButton")
+RandomTarget.Parent = ChooseOtherTargets
+RandomTarget.BackgroundColor3 = Color3.new(0.141176, 0.141176, 0.141176)
+RandomTarget.BorderColor3 = Color3.new(0.529412, 0.529412, 0.529412)
+RandomTarget.Text = "Random"
+RandomTarget.Font = "FredokaOne"
+RandomTarget.TextScaled = true
+RandomTarget.TextColor3 = Color3.new(1, 1, 1)
+RandomTarget.TextStrokeTransparency = 0
+RandomTarget.TextStrokeColor3 = Color3.new(0,0,0)
+RandomTarget.TextXAlignment = "Left"
+RandomTarget.Size = UDim2.new(1,0,0.33,0)
+local function ChangeTarget(part)
+	if part == "Head" then
+		HeadTarget.TextColor3 = Color3.new(0, 0, 1)
+		HumanoidRTTarget.TextColor3 = Color3.new(1, 1, 1)
+		RandomTarget.TextColor3 = Color3.new(1, 1, 1)
+		TargetLabel.Text = "Head"
+	elseif part == "HumanoidRootPart" then
+		HumanoidRTTarget.TextColor3 = Color3.new(0, 0, 1)
+		RandomTarget.TextColor3 = Color3.new(1, 1, 1)
+		HeadTarget.TextColor3 = Color3.new(1, 1, 1)
+		TargetLabel.Text = "HumanoidRootPart"
+	elseif part == "Random" then
+		HeadTarget.TextColor3 = Color3.new(1, 1, 1)
+		RandomTarget.TextColor3 = Color3.new(0, 0, 1)
+		HumanoidRTTarget.TextColor3 = Color3.new(1, 1, 1)
+		TargetLabel.Text = "Random"
+	end
+end
+local function DisplayOtherTargets()
+	if COTDebounce == false then
+		ChooseOtherTargets.Visible = true
+		COTDebounce = true
+	else
+		ChooseOtherTargets.Visible = false
+		COTDebounce = false
+	end
+	end
 local function ABEnabledCM()
 	if ABEnabledCMDebounce == false then
 		EnabledCheckMark.BorderColor3= Color3.new(0, 0, 0.498039)
@@ -309,6 +405,16 @@ ABButton.MouseButton1Click:Connect(ABDisplaying)
 EnabledCheckMark.MouseButton1Click:Connect(ABEnabledCM)
 TeamCheckMark.MouseButton1Click:Connect(TCEnabledCM)
 VisibleCheckMark.MouseButton1Click:Connect(VCEnabledCM)
+TargetLabel.MouseButton1Click:Connect(DisplayOtherTargets)
+HeadTarget.MouseButton1Click:Connect(function()
+	ChangeTarget("Head")
+end)
+HumanoidRTTarget.MouseButton1Click:Connect(function()
+	ChangeTarget("HumanoidRootPart")
+end)
+RandomTarget.MouseButton1Click:Connect(function()
+	ChangeTarget("Random")
+end)
 local dragging
 local dragInput
 local dragStart
