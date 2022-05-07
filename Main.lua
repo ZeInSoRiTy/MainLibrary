@@ -57,7 +57,7 @@ TitleText.TextStrokeTransparency = 0
 TitleText.TextStrokeColor3 = Color3.new(1, 1, 1)
 function zigzag(X) return math.acos(math.cos(X*math.pi))/math.pi end
 
-	
+
 
 local CloseButton = Instance.new("TextButton")
 CloseButton.Parent = gui
@@ -145,20 +145,28 @@ EnabledCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
 EnabledCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
 
 
+local EnabledCMLabel = Instance.new("TextLabel")
+EnabledCMLabel.Parent = ABFrame
+EnabledCMLabel.BackgroundTransparency = 1
+EnabledCMLabel.Size = UDim2.new(0.2,0,0.05,0)
+EnabledCMLabel.Position = UDim2.new(0.175,0,0.14,0)
+EnabledCMLabel.Text = "Enabled"
+EnabledCMLabel.Font = "FredokaOne"
+EnabledCMLabel.TextScaled = true
+EnabledCMLabel.TextColor3 = Color3.new(1, 1, 1)
 
 local function ABEnabledCM()
 	if ABEnabledCMDebounce == false then
 		EnabledCheckMark.BorderColor3= Color3.new(0, 0, 0.498039)
 		EnabledCheckMark.BackgroundColor3 = Color3.new(0, 0, 1)
 		ABEnabledCMDebounce = true
-		loadstring(game:HttpGet("github.com/ZeInSoRiTy/MainLibrary/blob/main/AimBot"))
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/mitka1337/Universal-roblox-aimbot-fullmaster/main/aim_master.lua", true))()
 	else
 		EnabledCheckMark.BorderColor3 = Color3.new(0.0705882, 0.0705882, 0.0705882)
 		EnabledCheckMark.BackgroundColor3 = Color3.new(0.184314, 0.184314, 0.184314)
 		ABEnabledCMDebounce = false	
 	end
 end
-
 local function ABDisplaying()
 	if ABDebounce == false then
 		ABFrame.Visible = true
@@ -170,15 +178,15 @@ local function ABDisplaying()
 end
 local function MenuDisplaying()
 	if MenuDebounce == false then
-	Menu:TweenSize(
-		UDim2.new(0.25,0,1,0),
-		Enum.EasingDirection.Out,
-		Enum.EasingStyle.Sine,
-		1,
-		true
+		Menu:TweenSize(
+			UDim2.new(0.25,0,1,0),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Sine,
+			1,
+			true
 		)
 		MenuDebounce = true
-		
+
 	else
 		Menu:TweenSize(
 			UDim2.new(0,0,1,0),
@@ -190,7 +198,7 @@ local function MenuDisplaying()
 		MenuDebounce = false
 		ABFrame.Visible = false
 	end
-	end
+end
 local function Displaying()
 	if DisplayDebounce == false then
 		CloseButton.Position = UDim2.new(0, 0,0, 0)
@@ -213,7 +221,7 @@ end
 
 
 local function CtrlImput(input)
---if KeyCode == "RightControl" then
+	--if KeyCode == "RightControl" then
 
 	--else
 
@@ -234,18 +242,6 @@ CloseButton.MouseButton1Click:Connect(Displaying)
 MenuButton.MouseButton1Click:Connect(MenuDisplaying)
 ABButton.MouseButton1Click:Connect(ABDisplaying)
 EnabledCheckMark.MouseButton1Click:Connect(ABEnabledCM)
-TeamCheckMark.MouseButton1Click:Connect(TCEnabledCM)
-VisibleCheckMark.MouseButton1Click:Connect(VCEnabledCM)
-TargetLabel.MouseButton1Click:Connect(DisplayOtherTargets)
-HeadTarget.MouseButton1Click:Connect(function()
-	ChangeTarget("Head")
-end)
-HumanoidRTTarget.MouseButton1Click:Connect(function()
-	ChangeTarget("HumanoidRootPart")
-end)
-RandomTarget.MouseButton1Click:Connect(function()
-	ChangeTarget("Random")
-end)
 local dragging
 local dragInput
 local dragStart
